@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Future of the Agentic Enterprise — Salesforce Futures</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Avant Garde Demi SFDC';src:local('Avant Garde Demi SFDC'),local('AvantGardeDemiSFDC'),local('ITC Avant Garde Gothic Demi');font-weight:600;font-display:swap;}
+@font-face{font-family:'Salesforce Sans';src:local('Salesforce Sans'),local('SalesforceSans-Regular');font-weight:400;font-display:swap;}
+@font-face{font-family:'Salesforce Sans';src:local('Salesforce Sans Light'),local('SalesforceSans-Light');font-weight:300;font-display:swap;}
+@font-face{font-family:'Salesforce Sans';src:local('Salesforce Sans Bold'),local('SalesforceSans-Bold');font-weight:700;font-display:swap;}
+
+:root{
+  --font-heading:'Avant Garde Demi SFDC','ITC Avant Garde Gothic','Century Gothic','Outfit',sans-serif;
+  --font-body:'Salesforce Sans','Outfit','Helvetica Neue',sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono','Fira Code',monospace;
+  --sf-blue:#0176D3;--sf-blue-light:#1B96FF;--sf-blue-dark:#032D60;
+  --sf-cloud:#00A1E0;--sf-navy:#16325C;
+  --accent-amber:#FE9339;--accent-gold:#F4BC25;
+  --accent-red:#EA001E;--accent-green:#2E844A;
+  --accent-purple:#9333EA;--accent-pink:#EC4899;
+  --sf-bg-light:#D4E5F7;--ts:0.35s;
+}
+[data-theme="dark"]{
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#151d2e;
+  --t1:#e8ecf4;--t2:#8b95a8;--t3:#4a5568;
+  --brd:rgba(255,255,255,0.06);--grid:rgba(1,118,211,0.07);
+  --glow:rgba(1,118,211,0.1);--sk:rgba(1,118,211,0.07);
+  --sks:#5a6a82;--nav:rgba(10,14,26,0.88);
+  --togbg:#1e293b;--togk:#e8ecf4;--togi:"☾";
+  --sf-logo-fill:#00A1E0;
+  --ared-bg:rgba(234,0,30,0.06);--ared-bd:rgba(234,0,30,0.22);
+  --aamb-bg:rgba(254,147,57,0.07);--aamb-bd:rgba(254,147,57,0.22);
+  --ablu-bg:rgba(1,118,211,0.07);--ablu-bd:rgba(1,118,211,0.22);
+  --agrn-bg:rgba(46,132,74,0.07);--agrn-bd:rgba(46,132,74,0.22);
+  --apur-bg:rgba(147,51,234,0.08);--apur-bd:rgba(147,51,234,0.22);
+}
+[data-theme="light"]{
+  --bg:#D4E5F7;--bg2:#ffffff;--bg3:#EBF2FA;
+  --t1:#032D60;--t2:#444444;--t3:#94a3b8;
+  --brd:rgba(0,0,0,0.07);--grid:rgba(1,118,211,0.05);
+  --glow:rgba(1,118,211,0.05);--sk:rgba(1,118,211,0.04);
+  --sks:#94a3b8;--nav:rgba(212,229,247,0.92);
+  --togbg:#e2e8f0;--togk:#032D60;--togi:"☀";
+  --sf-logo-fill:#0176D3;
+  --ared-bg:rgba(234,0,30,0.04);--ared-bd:rgba(234,0,30,0.15);
+  --aamb-bg:rgba(254,147,57,0.06);--aamb-bd:rgba(254,147,57,0.18);
+  --ablu-bg:rgba(1,118,211,0.05);--ablu-bd:rgba(1,118,211,0.15);
+  --agrn-bg:rgba(46,132,74,0.04);--agrn-bd:rgba(46,132,74,0.15);
+  --apur-bg:rgba(147,51,234,0.05);--apur-bd:rgba(147,51,234,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:var(--font-body);color:var(--t1);-webkit-font-smoothing:antialiased;transition:background var(--ts),color var(--ts);}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--glow) 0%,transparent 70%);pointer-events:none;z-index:0;}
+
+/* ── CHROME ── */
+.sf-logo{position:fixed;top:18px;right:92px;z-index:200;opacity:0.9;transition:opacity .3s;}
+.sf-logo:hover{opacity:1;}
+.tog{position:fixed;top:16px;right:24px;z-index:200;width:56px;height:30px;background:var(--togbg);border-radius:15px;border:1px solid var(--brd);cursor:pointer;transition:background var(--ts);display:flex;align-items:center;padding:0 4px;}
+.tog::after{content:var(--togi);width:22px;height:22px;border-radius:50%;background:var(--togk);display:flex;align-items:center;justify-content:center;font-size:12px;transition:transform var(--ts),background var(--ts);}
+[data-theme="light"] .tog::after{transform:translateX(24px);}
+.progress-track{position:fixed;top:0;left:0;right:0;height:3px;background:var(--brd);z-index:100;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sf-blue),var(--sf-cloud));transition:width .4s;border-radius:0 2px 2px 0;}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:var(--nav);backdrop-filter:blur(12px);border-top:1px solid var(--brd);z-index:100;font-family:var(--font-mono);font-size:12px;color:var(--t3);transition:background var(--ts);}
+.nav-bar .ctr{color:var(--sf-blue-light);letter-spacing:1px;}
+.nav-bar .sec{color:var(--t2);text-transform:uppercase;letter-spacing:2px;font-size:10px;}
+
+/* ── DECK ── */
+.deck{position:relative;width:100%;height:100%;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:72px 110px 90px;opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s;pointer-events:none;overflow-y:auto;}
+.slide.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+.slide.exit-up{opacity:0;transform:translateY(-18px);}
+.close-s{justify-content:center;align-items:center;text-align:center;}
+.close-s .quote{border-left:none;padding-left:0;text-align:center;max-width:820px;margin-left:auto;margin-right:auto;}
+
+/* ── TYPOGRAPHY ── */
+.sn{font-family:var(--font-mono);font-size:11px;color:var(--sf-blue);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;opacity:.75;}
+h1{font-family:var(--font-heading);font-size:clamp(44px,5.4vw,78px);font-weight:700;line-height:1.04;letter-spacing:-2px;margin-bottom:22px;}
+h1 .a{color:var(--sf-blue-light);}
+h1 .d{color:var(--t3);font-weight:300;font-family:var(--font-body);}
+h2{font-family:var(--font-heading);font-size:clamp(28px,3.4vw,46px);font-weight:700;line-height:1.15;letter-spacing:-1px;margin-bottom:18px;}
+h2 .a{color:var(--sf-blue-light);}
+h2 .gr{color:var(--accent-green);}
+h2 .am{color:var(--accent-amber);}
+h2 .pu{color:var(--accent-purple);}
+h3{font-family:var(--font-heading);font-size:20px;font-weight:600;color:var(--sf-blue-light);margin-bottom:12px;}
+.sub{font-family:var(--font-body);font-size:clamp(18px,2vw,24px);font-weight:300;color:var(--t2);line-height:1.55;max-width:740px;}
+.lead{font-family:var(--font-body);font-size:19px;color:var(--t2);line-height:1.65;max-width:860px;margin-bottom:18px;}
+.quote{font-family:var(--font-body);font-size:clamp(20px,2.5vw,32px);font-weight:300;font-style:italic;color:var(--t1);border-left:3px solid var(--sf-blue);padding-left:24px;margin:20px 0;line-height:1.5;}
+.attrib{font-family:var(--font-mono);font-size:13px;color:var(--t3);letter-spacing:1px;margin-top:8px;}
+.dv{width:48px;height:3px;background:var(--sf-blue);border-radius:2px;margin:14px 0;}
+
+/* ── CARDS ── */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:20px;}
+.c{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:22px;transition:border-color .3s,background var(--ts);}
+.c:hover{border-color:rgba(1,118,211,.3);}
+.cl{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--sf-blue-light);margin-bottom:8px;}
+.ct{font-family:var(--font-heading);font-size:19px;font-weight:700;margin-bottom:6px;}
+.cd{font-family:var(--font-body);font-size:15px;color:var(--t2);line-height:1.6;}
+
+/* ── ALERTS ── */
+.ac{border-radius:12px;padding:18px 22px;margin:12px 0;transition:background var(--ts),border var(--ts);}
+.ac-r{background:var(--ared-bg);border:1px solid var(--ared-bd);}
+.ac-a{background:var(--aamb-bg);border:1px solid var(--aamb-bd);}
+.ac-b{background:var(--ablu-bg);border:1px solid var(--ablu-bd);}
+.ac-g{background:var(--agrn-bg);border:1px solid var(--agrn-bd);}
+.ac-p{background:var(--apur-bg);border:1px solid var(--apur-bd);}
+.at{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+.ac-r .at{color:var(--accent-red);}
+.ac-a .at{color:var(--accent-amber);}
+.ac-b .at{color:var(--sf-blue-light);}
+.ac-g .at{color:var(--accent-green);}
+.ac-p .at{color:var(--accent-purple);}
+.att{font-family:var(--font-heading);font-size:18px;font-weight:700;margin-bottom:6px;}
+.ab{font-family:var(--font-body);font-size:15px;color:var(--t2);line-height:1.55;}
+.ab strong{color:var(--t1);}
+
+/* ── FLOW ── */
+.fc{display:flex;align-items:center;gap:0;margin:18px 0;flex-wrap:wrap;}
+.fn{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:12px 20px;font-family:var(--font-body);font-size:15px;font-weight:500;white-space:nowrap;transition:background var(--ts);}
+.fn.hi{border-color:var(--sf-blue);background:rgba(1,118,211,.12);color:var(--sf-blue-light);}
+.fn.hig{border-color:var(--accent-green);background:rgba(46,132,74,.1);color:var(--accent-green);}
+.fn.hia{border-color:var(--accent-amber);background:rgba(254,147,57,.09);color:var(--accent-amber);}
+.fn.higo{border-color:var(--accent-gold);background:rgba(244,188,37,.08);color:var(--accent-gold);}
+.fn.hip{border-color:var(--accent-purple);background:rgba(147,51,234,.1);color:var(--accent-purple);}
+.fa{font-family:var(--font-mono);color:var(--t3);font-size:18px;padding:0 8px;}
+
+/* ── LAYOUTS ── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+.two-6{display:grid;grid-template-columns:3fr 2fr;gap:40px;align-items:start;}
+.two-4{display:grid;grid-template-columns:2fr 3fr;gap:40px;align-items:start;}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.bl{list-style:none;margin-top:12px;}
+.bl li{position:relative;padding:8px 0 8px 24px;font-family:var(--font-body);font-size:15px;color:var(--t2);line-height:1.5;border-bottom:1px solid var(--brd);}
+.bl li:last-child{border-bottom:none;}
+.bl li::before{content:'';position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:2px;background:var(--sf-blue);}
+.bl li strong{color:var(--t1);font-weight:600;}
+
+/* ── METRICS ── */
+.metrics{display:flex;gap:14px;margin-top:16px;flex-wrap:wrap;}
+.metric{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:20px;flex:1;text-align:center;min-width:110px;}
+.mnum{font-family:var(--font-heading);font-size:40px;font-weight:700;line-height:1;}
+.mlbl{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-top:6px;}
+
+/* ── DRIVER PILLS ── */
+.driver-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px;}
+.driver{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:18px 22px;display:flex;gap:16px;align-items:center;}
+.driver-num{font-family:var(--font-mono);font-size:32px;font-weight:700;color:var(--sf-blue);line-height:1;}
+.driver-info{flex:1;}
+.driver-eng{font-family:var(--font-heading);font-size:17px;font-weight:700;margin-bottom:2px;}
+.driver-desc{font-family:var(--font-body);font-size:13px;color:var(--t2);}
+
+/* ── QUESTION CARDS ── */
+.qrow{display:flex;gap:18px;align-items:center;margin:14px 0;padding:18px 22px;background:var(--bg2);border:1px solid var(--brd);border-radius:14px;transition:background var(--ts),border-color .3s;}
+.qrow:hover{border-color:rgba(1,118,211,.3);}
+.qnum{font-family:var(--font-heading);font-size:36px;font-weight:700;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;}
+.qnum-1{background:var(--sf-blue);}
+.qnum-2{background:var(--accent-green);}
+.qnum-3{background:var(--accent-purple);}
+.qnum-4{background:var(--accent-amber);}
+.qtext{font-family:var(--font-heading);font-size:22px;font-weight:600;line-height:1.3;}
+.qtext .hi-1{color:var(--sf-blue-light);}
+.qtext .hi-2{color:var(--accent-green);}
+.qtext .hi-3{color:var(--accent-purple);}
+.qtext .hi-4{color:var(--accent-amber);}
+
+/* ── BADGES ── */
+.badge{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:4px;margin-left:7px;vertical-align:middle;}
+.badge-s{background:rgba(1,118,211,.15);color:var(--sf-blue-light);border:1px solid rgba(1,118,211,.25);}
+
+/* ── PULL QUOTE ── */
+.pull{background:var(--bg2);border:1px solid var(--brd);border-left:3px solid var(--sf-blue);border-radius:10px;padding:18px 22px;margin:12px 0;}
+.pull-txt{font-family:var(--font-body);font-size:16px;font-style:italic;color:var(--t1);line-height:1.55;font-weight:300;}
+.pull-attr{font-family:var(--font-mono);font-size:11px;color:var(--t3);letter-spacing:1px;margin-top:8px;text-transform:uppercase;}
+
+/* ── SVG SKETCHES ── */
+.sk-s{stroke:var(--sks);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.sk-f{fill:var(--sk);stroke:var(--sks);stroke-width:1.5;stroke-linecap:round;}
+.sk-a{stroke:var(--sf-blue-light);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.sk-g{stroke:var(--accent-green);fill:none;stroke-width:1.5;stroke-linecap:round;}
+.sk-am{stroke:var(--accent-amber);fill:none;stroke-width:1.8;stroke-linecap:round;}
+.sk-r{stroke:var(--accent-red);fill:none;stroke-width:1.8;stroke-linecap:round;}
+.sk-d{stroke:var(--t3);fill:none;stroke-width:1;stroke-linecap:round;opacity:.4;}
+.sketch-bg{position:absolute;pointer-events:none;z-index:-1;}
+
+@keyframes sd{from{stroke-dashoffset:400;}to{stroke-dashoffset:0;}}
+.slide.active .sk-draw path,.slide.active .sk-draw line,.slide.active .sk-draw circle,.slide.active .sk-draw ellipse,.slide.active .sk-draw rect,.slide.active .sk-draw polyline{stroke-dasharray:400;stroke-dashoffset:400;animation:sd 1.4s ease forwards;}
+.slide.active .sk-draw .s1{animation-delay:.1s;}
+.slide.active .sk-draw .s2{animation-delay:.3s;}
+.slide.active .sk-draw .s3{animation-delay:.5s;}
+.slide.active .sk-draw .s4{animation-delay:.7s;}
+.slide.active .sk-draw .s5{animation-delay:.9s;}
+.slide.active .sk-draw .s6{animation-delay:1.1s;}
+
+/* ── ANIMATIONS ── */
+@keyframes fu{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.slide.active .ai{animation:fu .5s ease forwards;}
+.slide.active .d1{animation-delay:.08s;opacity:0;}
+.slide.active .d2{animation-delay:.18s;opacity:0;}
+.slide.active .d3{animation-delay:.30s;opacity:0;}
+.slide.active .d4{animation-delay:.42s;opacity:0;}
+.slide.active .d5{animation-delay:.54s;opacity:0;}
+.slide.active .d6{animation-delay:.66s;opacity:0;}
+
+@keyframes sparkle-pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.15);}}
+.sparkle{animation:sparkle-pulse 3s ease-in-out infinite;}
+.sparkle:nth-of-type(2){animation-delay:1s;}
+.sparkle:nth-of-type(3){animation-delay:2s;}
+
+/* ── SOURCES ── */
+.sources{position:absolute;bottom:56px;left:110px;right:110px;font-family:var(--font-mono);font-size:10px;color:var(--t3);line-height:1.8;border-top:1px solid var(--brd);padding-top:6px;}
+.sources a{color:inherit;text-decoration:underline;text-underline-offset:2px;opacity:.8;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .slide{padding:40px 30px 80px;}
+  .two,.two-6,.two-4,.three,.four{grid-template-columns:1fr;}
+  .fc{flex-direction:column;align-items:flex-start;}
+  .fa{transform:rotate(90deg);}
+  .driver-grid{grid-template-columns:1fr;}
+  .sources{left:30px;right:30px;}
+}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--t3);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+<div class="tog" id="togBtn"></div>
+
+<div class="sf-logo">
+  <svg width="118" height="44" viewBox="0 0 118 44" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22.4 6.2c3.1-3.3 7.5-5.3 12.3-5.3c6.4 0 12 3.5 14.9 8.7c2.6-1.1 5.4-1.8 8.3-1.8c11.1 0 20.1 9 20.1 20.1s-9 20.1-20.1 20.1c-1.4 0-2.7-.1-4-.4c-2.7 4.4-7.5 7.3-13 7.3c-2.5 0-4.8-.6-6.9-1.7c-2.8 5.4-8.4 9.1-14.8 9.1c-7.4 0-13.7-4.8-15.9-11.5c-1 .2-2 .3-3.1.3C4.9 51.1 0 46.2 0 40.2c0-4.4 2.5-8.2 6.2-10.1c-.8-1.9-1.2-4-1.2-6.2c0-9.1 7.4-16.4 16.5-16.4c3.8 0 7.3 1.3 10 3.4" fill="#00A1E0" transform="scale(0.44)"/>
+    <text x="42" y="28" font-family="'Century Gothic','Outfit',sans-serif" font-size="18" font-weight="700" fill="var(--sf-logo-fill)" letter-spacing="-0.3">salesforce</text>
+  </svg>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- ════════════════ SLIDE 1 — TITLE ════════════════ -->
+<div class="slide active" data-section="SALESFORCE FUTURES" style="justify-content:flex-end;padding-bottom:120px;">
+  <div class="sketch-bg" style="right:50px;top:40px;opacity:.18;">
+    <svg class="sk-draw" width="320" height="320" viewBox="0 0 320 320">
+      <circle class="sk-a s1" cx="70" cy="60" r="4" fill="var(--sf-blue-light)" opacity=".5"/>
+      <circle class="sk-a s2" cx="180" cy="40" r="3" fill="var(--sf-blue-light)" opacity=".4"/>
+      <circle class="sk-a s2" cx="250" cy="130" r="5" fill="var(--sf-blue-light)" opacity=".5"/>
+      <circle class="sk-a s3" cx="130" cy="170" r="3" fill="var(--sf-blue-light)" opacity=".3"/>
+      <circle class="sk-a s3" cx="220" cy="240" r="4" fill="var(--sf-blue-light)" opacity=".4"/>
+      <circle class="sk-a s4" cx="80" cy="220" r="3" fill="var(--sf-blue-light)" opacity=".3"/>
+      <line class="sk-a s1" x1="70" y1="60" x2="180" y2="40" opacity=".15"/>
+      <line class="sk-a s2" x1="180" y1="40" x2="250" y2="130" opacity=".15"/>
+      <line class="sk-a s3" x1="250" y1="130" x2="130" y2="170" opacity=".1"/>
+      <line class="sk-a s4" x1="70" y1="60" x2="130" y2="170" opacity=".1"/>
+      <line class="sk-a s4" x1="130" y1="170" x2="220" y2="240" opacity=".12"/>
+      <line class="sk-a s5" x1="220" y1="240" x2="80" y2="220" opacity=".1"/>
+    </svg>
+  </div>
+  <div style="position:absolute;right:130px;top:90px;">
+    <svg class="sparkle" width="28" height="28" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" fill="var(--accent-gold)" opacity=".65"/></svg>
+  </div>
+  <div style="position:absolute;right:90px;top:180px;">
+    <svg class="sparkle" width="18" height="18" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" fill="var(--accent-gold)" opacity=".4"/></svg>
+  </div>
+  <div style="position:absolute;right:230px;top:230px;">
+    <svg class="sparkle" width="14" height="14" viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" fill="var(--sf-cloud)" opacity=".35"/></svg>
+  </div>
+  <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--sf-blue-light);margin-bottom:20px;" class="ai d1">SALESFORCE FUTURES · STRATEGY WORK</div>
+  <h1 class="ai d2">The Future of the<br><span class="a">Agentic</span><br><span class="d">Enterprise</span></h1>
+  <p class="sub ai d3" style="max-width:700px;">Anticipate, imagine, and shape the future of AI agents — how they will reshape capabilities, work, customers, and what leaders must do now.</p>
+  <div class="dv ai d4"></div>
+  <div class="fc ai d5">
+    <div class="fn hi">Capabilities</div>
+    <span class="fa">→</span>
+    <div class="fn hig">Work</div>
+    <span class="fa">→</span>
+    <div class="fn hip">Customers</div>
+    <span class="fa">→</span>
+    <div class="fn hia">Leading</div>
+  </div>
+  <div style="font-family:var(--font-mono);font-size:12px;color:var(--t3);margin-top:30px;" class="ai d6">Peter Schwartz · Mick Costigan · Marc Escobosa · David Berthy · Angela Gleason</div>
+</div>
+
+<!-- ════════════════ SLIDE 2 — FORESIGHT FRAMING ════════════════ -->
+<div class="slide" data-section="WHY FORESIGHT">
+  <div class="sn ai d1">THE OFFICIAL FUTURE — AND WHAT IT MISSES</div>
+  <h2 class="ai d2">The future is often <span class="a">assumed</span> to be a continuation of the past</h2>
+  <div class="two-4 ai d3">
+    <div>
+      <p class="lead">Most planning quietly defaults to one "official future" — a midpoint extrapolation, conservative enough to feel safe, narrow enough to miss what actually matters.</p>
+      <div class="ac ac-b">
+        <div class="at">The Zone of Undiscussability</div>
+        <div class="ab">Above and below the official future lies the zone of undiscussability — the futures we won't seriously entertain because they feel impolite, alarming, or career-limiting. <strong>This is where the disruption almost always comes from.</strong></div>
+      </div>
+      <div class="ac ac-g">
+        <div class="at">Considering Alternatives</div>
+        <div class="ab"><strong>Generate options and test strategies. Sense opportunities and risks. Accelerate decisions.</strong> Foresight isn't prediction — it's organized peripheral vision.</div>
+      </div>
+    </div>
+    <div>
+      <svg class="sk-draw" width="100%" height="380" viewBox="0 0 460 380">
+        <!-- Cone of futures -->
+        <defs>
+          <linearGradient id="undisc-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FE9339" stop-opacity=".2"/>
+            <stop offset="100%" stop-color="#FE9339" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="undisc-bot" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#FE9339" stop-opacity=".2"/>
+            <stop offset="100%" stop-color="#FE9339" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Undiscussability zones -->
+        <path d="M 60 190 L 420 30 L 420 90 L 60 190 Z" fill="url(#undisc-top)" stroke="#FE9339" stroke-width="1" stroke-dasharray="4,3" opacity=".5" class="s1"/>
+        <path d="M 60 190 L 420 350 L 420 290 L 60 190 Z" fill="url(#undisc-bot)" stroke="#FE9339" stroke-width="1" stroke-dasharray="4,3" opacity=".5" class="s1"/>
+        <!-- Official future line -->
+        <line x1="60" y1="190" x2="420" y2="190" stroke="#1B96FF" stroke-width="2.5" class="s2"/>
+        <!-- Past axis -->
+        <line x1="60" y1="190" x2="60" y2="60" stroke="#5a6a82" stroke-width="1" opacity=".3" class="s3"/>
+        <line x1="60" y1="190" x2="60" y2="320" stroke="#5a6a82" stroke-width="1" opacity=".3" class="s3"/>
+        <!-- Past trail -->
+        <path d="M 30 200 Q 45 192 60 190" fill="none" stroke="#5a6a82" stroke-width="2" stroke-dasharray="3,3" class="s4"/>
+        <!-- Labels -->
+        <text x="60" y="345" font-family="JetBrains Mono,monospace" font-size="11" fill="#8b95a8" letter-spacing="2" text-anchor="middle">PRESENT</text>
+        <text x="30" y="180" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="1.5">PAST</text>
+        <text x="430" y="194" font-family="JetBrains Mono,monospace" font-size="10" fill="#1B96FF" letter-spacing="1.5">FUTURE</text>
+        <text x="240" y="180" font-family="Outfit,sans-serif" font-size="12" fill="#1B96FF" font-weight="600" text-anchor="middle">"Official Future"</text>
+        <text x="240" y="80" font-family="Outfit,sans-serif" font-size="12" fill="#FE9339" font-weight="500" text-anchor="middle" opacity=".8">Zone of Undiscussability</text>
+        <text x="240" y="320" font-family="Outfit,sans-serif" font-size="12" fill="#FE9339" font-weight="500" text-anchor="middle" opacity=".8">Zone of Undiscussability</text>
+        <!-- End marker -->
+        <circle cx="420" cy="190" r="5" fill="#1B96FF" class="s5"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 3 — FOUR QUESTIONS ════════════════ -->
+<div class="slide" data-section="THE FRAMEWORK">
+  <div class="sn ai d1">EQUIPPING LEADERS</div>
+  <h2 class="ai d2">Four questions for the <span class="a">Agentic Enterprise</span></h2>
+  <p class="lead ai d3" style="max-width:920px;">A foresight framework structured around capability, organizational form, market behavior, and leadership action — each one a distinct lens, each one needed to see the whole.</p>
+
+  <div class="ai d4" style="margin-top:8px;">
+    <div class="qrow">
+      <div class="qnum qnum-1">1</div>
+      <div class="qtext">How <span class="hi-1">capable</span> will AI agents become?</div>
+    </div>
+    <div class="qrow">
+      <div class="qnum qnum-2">2</div>
+      <div class="qtext">How will AI agents transform <span class="hi-2">work and organizations</span>?</div>
+    </div>
+    <div class="qrow">
+      <div class="qnum qnum-3">3</div>
+      <div class="qtext">How will AI agents shape emerging <span class="hi-3">customer behavior</span>?</div>
+    </div>
+    <div class="qrow">
+      <div class="qnum qnum-4">4</div>
+      <div class="qtext">What must <span class="hi-4">leaders do now</span> to prepare for the Agentic Enterprise?</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 4 — MARGINAL INFO COSTS ════════════════ -->
+<div class="slide" data-section="CAPABILITIES">
+  <div class="sn ai d1">CAPABILITIES · THE PATTERN</div>
+  <h2 class="ai d2">When marginal information costs change, <span class="a">new disruption follows</span></h2>
+  <div class="two-4 ai d3">
+    <div>
+      <p class="lead">Each computing era is defined by what gets radically cheaper to do with information — and what becomes newly possible as a result. The pattern is consistent: an information-cost collapse precedes a wave of disruption that wasn't visible from inside the old regime.</p>
+      <div class="ac ac-b">
+        <div class="at">The Agentic Era</div>
+        <div class="ab">If GenAI made <strong>manipulation of information</strong> cheap, agentic AI makes <strong>coordination cheap</strong> — across information, systems, people, and markets. That's a different order of disruption.</div>
+      </div>
+      <p class="lead" style="margin-top:14px;font-size:16px;color:var(--t3);font-style:italic;">"Kmart and Walmart got access to the bar code in the same year." Same input. Radically different responses. Same opening exists now.</p>
+    </div>
+    <div>
+      <svg class="sk-draw" width="100%" height="400" viewBox="0 0 480 400">
+        <!-- baseline -->
+        <line x1="40" y1="360" x2="460" y2="360" stroke="#5a6a82" stroke-width="1" opacity=".4" class="s1"/>
+        <!-- Stair steps -->
+        <!-- PC -->
+        <rect x="50" y="320" width="70" height="40" fill="rgba(1,118,211,.1)" stroke="#1B96FF" stroke-width="1.5" opacity=".5" class="s1"/>
+        <text x="85" y="345" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#1B96FF" font-weight="600">PC</text>
+        <text x="85" y="378" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">duplication</text>
+        <text x="85" y="390" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">millions</text>
+        <!-- Internet -->
+        <rect x="135" y="260" width="80" height="100" fill="rgba(1,118,211,.13)" stroke="#1B96FF" stroke-width="1.5" opacity=".7" class="s2"/>
+        <text x="175" y="285" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#1B96FF" font-weight="600">Internet</text>
+        <text x="175" y="378" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">distribution</text>
+        <text x="175" y="390" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">billions</text>
+        <!-- GenAI -->
+        <rect x="230" y="190" width="90" height="170" fill="rgba(46,132,74,.13)" stroke="#2E844A" stroke-width="1.8" class="s3"/>
+        <text x="275" y="215" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#2E844A" font-weight="700">GenAI</text>
+        <text x="275" y="232" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2E844A">manipulation</text>
+        <text x="275" y="378" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">trillions</text>
+        <text x="275" y="390" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">of devices</text>
+        <!-- Agentic -->
+        <rect x="335" y="80" width="115" height="280" fill="rgba(254,147,57,.13)" stroke="#FE9339" stroke-width="2.2" class="s4"/>
+        <text x="392" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#FE9339" font-weight="700">Agentic AI</text>
+        <text x="392" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#FE9339">coordination of:</text>
+        <text x="392" y="150" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#e8ecf4">information</text>
+        <text x="392" y="168" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#e8ecf4">systems</text>
+        <text x="392" y="186" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#e8ecf4">people</text>
+        <text x="392" y="204" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#e8ecf4">markets</text>
+        <text x="392" y="222" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#e8ecf4" opacity=".6">…</text>
+        <text x="392" y="378" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#FE9339">⌁ next</text>
+        <text x="392" y="390" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#FE9339">expansion</text>
+        <!-- y-axis label -->
+        <text x="15" y="50" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="1.5" transform="rotate(-90 15 50)">SCOPE</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 5 — FOUR EXPONENTIAL DRIVERS ════════════════ -->
+<div class="slide" data-section="CAPABILITIES">
+  <div class="sn ai d1">CAPABILITIES · THE DRIVERS</div>
+  <h2 class="ai d2">AI isn't just growing — it's propelled by <span class="a">four independent exponentials</span></h2>
+  <p class="lead ai d3" style="max-width:920px;">Each driver compounds independently. The combined trajectory is steeper than any one of them. Betting against the rate of improvement means betting against four exponentials at once.</p>
+
+  <div class="two ai d4" style="margin-top:8px;">
+    <div>
+      <div class="driver-grid" style="grid-template-columns:1fr;">
+        <div class="driver">
+          <div class="driver-num" style="color:var(--sf-blue-light);">1</div>
+          <div class="driver-info">
+            <div class="driver-eng">Compute Density</div>
+            <div class="driver-desc">Hardware performance per dollar — chip die improvements, specialized silicon, memory bandwidth.</div>
+          </div>
+        </div>
+        <div class="driver">
+          <div class="driver-num" style="color:var(--accent-green);">2</div>
+          <div class="driver-info">
+            <div class="driver-eng">Cluster Scale</div>
+            <div class="driver-desc">Infrastructure volume — datacenter buildouts, networking fabric, power delivery, interconnect topology.</div>
+          </div>
+        </div>
+        <div class="driver">
+          <div class="driver-num" style="color:var(--accent-amber);">3</div>
+          <div class="driver-info">
+            <div class="driver-eng">Data Frontiers</div>
+            <div class="driver-desc">Input expansion — synthetic data, multimodal corpora, RL environments, real-world deployment feedback.</div>
+          </div>
+        </div>
+        <div class="driver">
+          <div class="driver-num" style="color:var(--accent-purple);">4</div>
+          <div class="driver-info">
+            <div class="driver-eng">Algorithmic ROI</div>
+            <div class="driver-desc">Software efficiency — better training methods, smarter architectures, more capability per FLOP.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <svg class="sk-draw" width="100%" height="420" viewBox="0 0 460 420">
+        <!-- Axes -->
+        <line x1="60" y1="380" x2="430" y2="380" stroke="#5a6a82" stroke-width="1.2" class="s1"/>
+        <line x1="60" y1="380" x2="60" y2="40" stroke="#5a6a82" stroke-width="1.2" class="s1"/>
+        <text x="430" y="400" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" text-anchor="end">TIME →</text>
+        <text x="35" y="50" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" transform="rotate(-90 35 50)">CAPABILITY</text>
+        <!-- Compute Density curve -->
+        <path d="M 60 360 Q 200 340 320 230 T 420 100" fill="none" stroke="#1B96FF" stroke-width="2" class="s2"/>
+        <text x="420" y="95" font-family="JetBrains Mono,monospace" font-size="10" fill="#1B96FF" text-anchor="end">Compute</text>
+        <!-- Cluster Scale curve -->
+        <path d="M 60 365 Q 220 355 330 250 T 420 130" fill="none" stroke="#2E844A" stroke-width="2" class="s3"/>
+        <text x="420" y="155" font-family="JetBrains Mono,monospace" font-size="10" fill="#2E844A" text-anchor="end">Cluster</text>
+        <!-- Data Frontiers curve -->
+        <path d="M 60 370 Q 240 350 340 270 T 420 170" fill="none" stroke="#FE9339" stroke-width="2" class="s4"/>
+        <text x="420" y="200" font-family="JetBrains Mono,monospace" font-size="10" fill="#FE9339" text-anchor="end">Data</text>
+        <!-- Algorithmic ROI curve -->
+        <path d="M 60 372 Q 250 360 350 290 T 420 210" fill="none" stroke="#9333EA" stroke-width="2" class="s5"/>
+        <text x="420" y="240" font-family="JetBrains Mono,monospace" font-size="10" fill="#9333EA" text-anchor="end">Algo ROI</text>
+        <!-- Combined effect note -->
+        <text x="240" y="60" font-family="Outfit,sans-serif" font-size="13" fill="#e8ecf4" font-weight="600" text-anchor="middle">Combined trajectory</text>
+        <text x="240" y="80" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" text-anchor="middle">multiplicative, not additive</text>
+        <!-- annotation arrow -->
+        <path d="M 240 90 Q 260 105 290 115" fill="none" stroke="#5a6a82" stroke-width="1" stroke-dasharray="3,3" class="s6"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 6 — JAGGED FRONTIER ════════════════ -->
+<div class="slide" data-section="CAPABILITIES">
+  <div class="sn ai d1">CAPABILITIES · WHAT'S UNEVEN</div>
+  <h2 class="ai d2">The jagged frontier: <span class="a">superhuman in some domains, brittle in others</span></h2>
+  <div class="two-6 ai d3">
+    <div>
+      <svg class="sk-draw" width="100%" height="440" viewBox="0 0 500 440">
+        <!-- Threshold line -->
+        <line x1="40" y1="220" x2="470" y2="220" stroke="#1B96FF" stroke-width="1.5" stroke-dasharray="6,4" class="s1"/>
+        <text x="470" y="214" font-family="JetBrains Mono,monospace" font-size="10" fill="#1B96FF" text-anchor="end" letter-spacing="1">HUMAN STANDARD</text>
+        <!-- Above-human zone (green-ish) -->
+        <text x="60" y="40" font-family="JetBrains Mono,monospace" font-size="10" fill="#2E844A" letter-spacing="1.5">EXCEEDS HUMAN</text>
+        <text x="60" y="410" font-family="JetBrains Mono,monospace" font-size="10" fill="#EA001E" letter-spacing="1.5">BELOW HUMAN</text>
+        <!-- ABOVE: capable domains -->
+        <g class="s2">
+          <ellipse cx="115" cy="90" rx="62" ry="22" fill="rgba(46,132,74,.16)" stroke="#2E844A" stroke-width="1.5"/>
+          <text x="115" y="95" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#2E844A" font-weight="700">Coding</text>
+        </g>
+        <g class="s2">
+          <ellipse cx="270" cy="115" rx="68" ry="22" fill="rgba(46,132,74,.13)" stroke="#2E844A" stroke-width="1.5"/>
+          <text x="270" y="120" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" fill="#2E844A" font-weight="600">Chip Design</text>
+        </g>
+        <g class="s3">
+          <ellipse cx="395" cy="155" rx="68" ry="22" fill="rgba(46,132,74,.08)" stroke="#2E844A" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="395" y="160" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#2E844A" font-weight="500">Model Dev?</text>
+        </g>
+        <!-- BELOW: weak domains -->
+        <g class="s4">
+          <ellipse cx="125" cy="295" rx="72" ry="22" fill="rgba(234,0,30,.10)" stroke="#EA001E" stroke-width="1.5"/>
+          <text x="125" y="300" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" fill="#EA001E" font-weight="600">Ethical Judgment</text>
+        </g>
+        <g class="s4">
+          <ellipse cx="290" cy="335" rx="58" ry="22" fill="rgba(234,0,30,.10)" stroke="#EA001E" stroke-width="1.5"/>
+          <text x="290" y="340" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#EA001E" font-weight="700">Leadership</text>
+        </g>
+        <g class="s5">
+          <ellipse cx="410" cy="375" rx="56" ry="22" fill="rgba(234,0,30,.10)" stroke="#EA001E" stroke-width="1.5"/>
+          <text x="410" y="380" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#EA001E" font-weight="700">Strategy</text>
+        </g>
+        <!-- Y-axis label hint -->
+        <text x="15" y="225" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8" transform="rotate(-90 15 225)">CAPABILITY</text>
+      </svg>
+    </div>
+    <div>
+      <p class="lead">Reinforcement learning has driven dramatic gains in domains where output is <strong>specifiable</strong> and <strong>verifiable</strong>. Where neither holds — leadership, strategy, ethical judgment — progress is slower and harder to measure.</p>
+      <div class="ac ac-b">
+        <div class="at">The Three Conditions</div>
+        <div class="ab"><strong>Legible.</strong> <strong>Specifiable.</strong> <strong>Verifiable.</strong> Domains that satisfy all three are racing ahead. Domains that satisfy none stay stubbornly human.</div>
+      </div>
+      <div class="pull">
+        <div class="pull-txt">"OpenAI's free Advanced Voice Mode will fumble the dumbest questions in your Instagram reels — and at the same time, OpenAI's highest-tier Codex model will go off for an hour to coherently restructure an entire code base."</div>
+        <div class="pull-attr">Industry observation, 2026</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 7 — AGENTIC HARNESS ════════════════ -->
+<div class="slide" data-section="CAPABILITIES">
+  <div class="sn ai d1">CAPABILITIES · THE HARNESS</div>
+  <h2 class="ai d2">AI-in-use will improve as the <span class="a">agentic harness matures</span></h2>
+  <p class="lead ai d3" style="max-width:920px;">The LLM is just the engine. What makes it useful is everything bolted around it — tool use, orchestration, context engineering, safety. 100 years ago, a "car" was a park bench, three bicycle tires, and a bunch of hot, spinning metal. The harness was missing. We're in the same moment now.</p>
+
+  <div class="two-4 ai d4">
+    <div>
+      <div class="ac ac-b">
+        <div class="at">The Engine</div>
+        <div class="ab"><strong>LLM capability</strong> — improving on the four exponentials. But raw capability ≠ deployable capability.</div>
+      </div>
+      <div class="ac ac-a">
+        <div class="at">The Harness Gap</div>
+        <div class="ab">Most enterprise AI failures aren't model failures. They're harness failures — bad context, brittle tools, missing safety, no orchestration. <strong>This is where the next wave of value lives.</strong></div>
+      </div>
+    </div>
+    <div>
+      <svg class="sk-draw" width="100%" height="380" viewBox="0 0 540 380">
+        <!-- Outer ring: harness components -->
+        <!-- Central engine (LLM) -->
+        <circle cx="270" cy="200" r="58" fill="rgba(1,118,211,.18)" stroke="#1B96FF" stroke-width="2.5" class="s1"/>
+        <text x="270" y="195" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#1B96FF" font-weight="700">LLM</text>
+        <text x="270" y="213" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#1B96FF" opacity=".8">v8 engine</text>
+
+        <!-- Harness components around -->
+        <!-- Tool Use (top) -->
+        <g class="s2">
+          <circle cx="270" cy="60" r="34" fill="rgba(46,132,74,.13)" stroke="#2E844A" stroke-width="1.8"/>
+          <text x="270" y="58" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#2E844A" font-weight="700">Tool</text>
+          <text x="270" y="72" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#2E844A" font-weight="700">Use</text>
+          <line x1="270" y1="94" x2="270" y2="142" stroke="#2E844A" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Trust (top-right) -->
+        <g class="s2">
+          <circle cx="430" cy="100" r="34" fill="rgba(234,0,30,.10)" stroke="#EA001E" stroke-width="1.8"/>
+          <text x="430" y="105" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#EA001E" font-weight="700">Trust</text>
+          <line x1="404" y1="123" x2="316" y2="172" stroke="#EA001E" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Orchestration (right) -->
+        <g class="s3">
+          <circle cx="470" cy="200" r="34" fill="rgba(254,147,57,.12)" stroke="#FE9339" stroke-width="1.8"/>
+          <text x="470" y="197" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#FE9339" font-weight="700">Orches-</text>
+          <text x="470" y="210" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#FE9339" font-weight="700">tration</text>
+          <line x1="436" y1="200" x2="328" y2="200" stroke="#FE9339" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Interfaces (bottom-right) -->
+        <g class="s3">
+          <circle cx="430" cy="300" r="34" fill="rgba(147,51,234,.13)" stroke="#9333EA" stroke-width="1.8"/>
+          <text x="430" y="297" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#9333EA" font-weight="700">Inter-</text>
+          <text x="430" y="310" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#9333EA" font-weight="700">faces</text>
+          <line x1="404" y1="277" x2="316" y2="228" stroke="#9333EA" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Safety (bottom) -->
+        <g class="s4">
+          <circle cx="270" cy="340" r="34" fill="rgba(244,188,37,.12)" stroke="#F4BC25" stroke-width="1.8"/>
+          <text x="270" y="338" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#F4BC25" font-weight="700">Safety</text>
+          <text x="270" y="352" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#F4BC25">cage</text>
+          <line x1="270" y1="306" x2="270" y2="258" stroke="#F4BC25" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Multi-agent (bottom-left) -->
+        <g class="s4">
+          <circle cx="110" cy="300" r="34" fill="rgba(0,161,224,.13)" stroke="#00A1E0" stroke-width="1.8"/>
+          <text x="110" y="297" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#00A1E0" font-weight="700">Multi-</text>
+          <text x="110" y="310" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#00A1E0" font-weight="700">agent</text>
+          <line x1="136" y1="277" x2="224" y2="228" stroke="#00A1E0" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Context Engineering (left) -->
+        <g class="s5">
+          <circle cx="70" cy="200" r="34" fill="rgba(27,150,255,.13)" stroke="#1B96FF" stroke-width="1.8"/>
+          <text x="70" y="197" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#1B96FF" font-weight="700">Context</text>
+          <text x="70" y="210" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#1B96FF" font-weight="700">Eng.</text>
+          <line x1="104" y1="200" x2="212" y2="200" stroke="#1B96FF" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Brakes / fail-safes (top-left) -->
+        <g class="s5">
+          <circle cx="110" cy="100" r="34" fill="rgba(91,106,130,.13)" stroke="#5a6a82" stroke-width="1.8"/>
+          <text x="110" y="97" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#8b95a8" font-weight="700">Fail-</text>
+          <text x="110" y="110" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#8b95a8" font-weight="700">safes</text>
+          <line x1="136" y1="123" x2="224" y2="172" stroke="#5a6a82" stroke-width="1.2" stroke-dasharray="3,3" opacity=".5"/>
+        </g>
+        <!-- Label -->
+        <text x="270" y="25" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="2">THE AGENTIC HARNESS</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 8 — AGENTIC LOOP ════════════════ -->
+<div class="slide" data-section="CAPABILITIES">
+  <div class="sn ai d1">CAPABILITIES · THE UNIT OF WORK</div>
+  <h2 class="ai d2">An agentic work unit closes the loop: <span class="a">reason · act · verify</span></h2>
+
+  <div class="two ai d3">
+    <div>
+      <p class="lead">An agent isn't just a chatbot with tools. It's a closed loop of cognition and action. When all three components work — and only when all three work — the agent can be trusted to complete a task without a human re-doing it.</p>
+      <div class="ac ac-b">
+        <div class="at">Reason</div>
+        <div class="ab">Can the agent <strong>plan</strong> a path from where things are to where the goal is? Can it decompose, prioritize, and revise?</div>
+      </div>
+      <div class="ac ac-g">
+        <div class="at">Act</div>
+        <div class="ab">Can it <strong>execute</strong> in the actual systems where work lives? Or is it a brilliant strategist trapped in a sandbox?</div>
+      </div>
+      <div class="ac ac-a">
+        <div class="at">Verify</div>
+        <div class="ab">Can it <strong>tell if it succeeded</strong>? Without verification, you're just outsourcing your work to a confident hallucinator.</div>
+      </div>
+    </div>
+    <div>
+      <svg class="sk-draw" width="100%" height="440" viewBox="0 0 460 440">
+        <!-- Central goal -->
+        <circle cx="230" cy="220" r="42" fill="rgba(244,188,37,.10)" stroke="#F4BC25" stroke-width="1.5" stroke-dasharray="5,4" class="s1"/>
+        <text x="230" y="218" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" fill="#F4BC25" font-weight="700">GOAL</text>
+        <text x="230" y="234" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#F4BC25">target state</text>
+
+        <!-- Reason node (top) -->
+        <g class="s2">
+          <circle cx="230" cy="80" r="48" fill="rgba(27,150,255,.15)" stroke="#1B96FF" stroke-width="2.5"/>
+          <text x="230" y="76" text-anchor="middle" font-family="Outfit,sans-serif" font-size="15" fill="#1B96FF" font-weight="700">Reason</text>
+          <text x="230" y="94" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1B96FF">plan</text>
+        </g>
+
+        <!-- Act node (right) -->
+        <g class="s3">
+          <circle cx="370" cy="290" r="48" fill="rgba(46,132,74,.15)" stroke="#2E844A" stroke-width="2.5"/>
+          <text x="370" y="286" text-anchor="middle" font-family="Outfit,sans-serif" font-size="15" fill="#2E844A" font-weight="700">Act</text>
+          <text x="370" y="304" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2E844A">execute</text>
+        </g>
+
+        <!-- Verify node (left) -->
+        <g class="s4">
+          <circle cx="90" cy="290" r="48" fill="rgba(254,147,57,.13)" stroke="#FE9339" stroke-width="2.5"/>
+          <text x="90" y="286" text-anchor="middle" font-family="Outfit,sans-serif" font-size="15" fill="#FE9339" font-weight="700">Verify</text>
+          <text x="90" y="304" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#FE9339">check</text>
+        </g>
+
+        <!-- Arrows: Reason → Act -->
+        <path d="M 275 110 Q 340 175 348 245" fill="none" stroke="#1B96FF" stroke-width="2" marker-end="url(#arr-blu)" class="s5"/>
+        <!-- Arrows: Act → Verify -->
+        <path d="M 325 320 Q 230 365 140 320" fill="none" stroke="#2E844A" stroke-width="2" marker-end="url(#arr-grn)" class="s5"/>
+        <!-- Arrows: Verify → Reason -->
+        <path d="M 110 245 Q 130 175 185 110" fill="none" stroke="#FE9339" stroke-width="2" marker-end="url(#arr-amb)" class="s6"/>
+
+        <defs>
+          <marker id="arr-blu" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#1B96FF"/>
+          </marker>
+          <marker id="arr-grn" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#2E844A"/>
+          </marker>
+          <marker id="arr-amb" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#FE9339"/>
+          </marker>
+        </defs>
+
+        <!-- Caption: loop close -->
+        <text x="230" y="410" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#8b95a8" letter-spacing="2">AGENTIC LOOP</text>
+        <text x="230" y="425" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8" opacity=".7">close all three and the unit holds</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 9 — RESTRUCTURING WORK ════════════════ -->
+<div class="slide" data-section="WORK">
+  <div class="sn ai d1">WORK · THE QUESTION</div>
+  <h2 class="ai d2">In an agentic enterprise, <span class="a">how might work be restructured?</span></h2>
+  <p class="lead ai d3" style="max-width:920px;">The org chart has been remarkably stable for a century. It's about to bend in ways the spreadsheet won't show, because the unit of production is no longer just the employee. The question isn't "how many people do we need?" — it's "what work belongs where?"</p>
+
+  <div class="three ai d4" style="margin-top:18px;">
+    <div class="c" style="border-top:3px solid var(--sf-blue);">
+      <div class="cl">Configuration 1</div>
+      <div class="ct">Human Employees</div>
+      <div class="cd">The status quo. Work flows through people; agents are bolted-on assistants if they exist at all.</div>
+      <svg width="100%" height="100" viewBox="0 0 220 100" style="margin-top:14px;">
+        <g>
+          <circle cx="40" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="80" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="120" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="160" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="200" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-green);">
+      <div class="cl">Configuration 2</div>
+      <div class="ct">Humans + AI Assistants</div>
+      <div class="cd">Each person amplified by a personal AI layer. Boundaries of jobs shift but reporting lines stay roughly intact.</div>
+      <svg width="100%" height="100" viewBox="0 0 220 100" style="margin-top:14px;">
+        <g>
+          <circle cx="40" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="40" cy="50" r="22" fill="none" stroke="#2E844A" stroke-width="1.2" stroke-dasharray="3,2" opacity=".7"/>
+          <circle cx="90" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="90" cy="50" r="22" fill="none" stroke="#2E844A" stroke-width="1.2" stroke-dasharray="3,2" opacity=".7"/>
+          <circle cx="140" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="140" cy="50" r="22" fill="none" stroke="#2E844A" stroke-width="1.2" stroke-dasharray="3,2" opacity=".7"/>
+          <circle cx="190" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <circle cx="190" cy="50" r="22" fill="none" stroke="#2E844A" stroke-width="1.2" stroke-dasharray="3,2" opacity=".7"/>
+        </g>
+      </svg>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-amber);">
+      <div class="cl">Configuration 3</div>
+      <div class="ct">Humans + Agents</div>
+      <div class="cd">Agents become first-class operators in the org. People do the work only agents can't — judgment, taste, relationship, responsibility.</div>
+      <svg width="100%" height="100" viewBox="0 0 220 100" style="margin-top:14px;">
+        <g>
+          <circle cx="35" cy="50" r="14" fill="rgba(27,150,255,.2)" stroke="#1B96FF" stroke-width="2"/>
+          <rect x="65" y="36" width="28" height="28" rx="6" fill="rgba(254,147,57,.18)" stroke="#FE9339" stroke-width="2"/>
+          <rect x="105" y="36" width="28" height="28" rx="6" fill="rgba(254,147,57,.18)" stroke="#FE9339" stroke-width="2"/>
+          <rect x="145" y="36" width="28" height="28" rx="6" fill="rgba(254,147,57,.18)" stroke="#FE9339" stroke-width="2"/>
+          <rect x="185" y="36" width="28" height="28" rx="6" fill="rgba(254,147,57,.18)" stroke="#FE9339" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="ac ac-p ai d5" style="margin-top:24px;">
+    <div class="at">Underneath the ratio question</div>
+    <div class="ab">What might your org look like if you could <strong>target the highest costs in your business, remove system bottlenecks, and add new activities that were never viable before</strong>? The right question isn't "what's the human-to-agent ratio?" — it's "what work suddenly becomes possible?"</div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 10 — AUTONOMIC CORE ════════════════ -->
+<div class="slide" data-section="WORK">
+  <div class="sn ai d1">WORK · THE EMERGING STRUCTURE</div>
+  <h2 class="ai d2">A layer of <span class="a">humans + agents</span> wrapped around an <span class="gr">autonomic core</span></h2>
+  <div class="two-4 ai d3">
+    <div>
+      <p class="lead">A useful analogy: the body. The autonomic nervous system handles heartbeat, breathing, digestion — the optimization and coordination that doesn't need conscious thought. The cerebral cortex handles meaning, judgment, and taste. Organizations are starting to look the same.</p>
+      <div class="ac ac-g">
+        <div class="at">Autonomic Core</div>
+        <div class="ab"><strong>Optimizing, coordinating, executing.</strong> Verifiable tasks. Continuous operation. No need for a human to be in every loop — and a strong case that humans should not be.</div>
+      </div>
+      <div class="ac ac-p">
+        <div class="at">Meaning-Making Layer</div>
+        <div class="ab"><strong>Judgment, taste, ambiguity resolution.</strong> Humans setting direction, supplying values, taking responsibility — augmented by agents but not replaced by them.</div>
+      </div>
+    </div>
+    <div>
+      <!-- Stylized anatomical-style illustration in the deck's geometric idiom -->
+      <svg width="100%" height="450" viewBox="0 0 500 450">
+        <defs>
+          <radialGradient id="outerRing" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FE9339" stop-opacity=".22"/>
+            <stop offset="70%" stop-color="#FE9339" stop-opacity=".10"/>
+            <stop offset="100%" stop-color="#FE9339" stop-opacity=".05"/>
+          </radialGradient>
+          <radialGradient id="innerCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#9333EA" stop-opacity=".35"/>
+            <stop offset="70%" stop-color="#9333EA" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#9333EA" stop-opacity=".08"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Outer ring: Humans + Agents -->
+        <circle cx="250" cy="225" r="170" fill="url(#outerRing)" stroke="#FE9339" stroke-width="1.5" class="s1"/>
+        <text x="250" y="80" text-anchor="middle" font-family="Outfit,sans-serif" font-size="15" fill="#FE9339" font-weight="700">Humans + Agents</text>
+
+        <!-- Inner core -->
+        <circle cx="250" cy="225" r="80" fill="url(#innerCore)" stroke="#9333EA" stroke-width="2" class="s2"/>
+        <text x="250" y="220" text-anchor="middle" font-family="Outfit,sans-serif" font-size="14" fill="#9333EA" font-weight="700">Autonomic</text>
+        <text x="250" y="240" text-anchor="middle" font-family="Outfit,sans-serif" font-size="14" fill="#9333EA" font-weight="700">Core</text>
+
+        <!-- "Brain" specimen (left) -->
+        <g class="s3">
+          <circle cx="80" cy="380" r="44" fill="rgba(27,150,255,.10)" stroke="#1B96FF" stroke-width="1.5"/>
+          <!-- Stylized brain shape -->
+          <path d="M 60 380 Q 55 365 65 358 Q 75 348 85 358 Q 95 348 105 358 Q 115 365 110 380 Q 115 395 100 398 Q 90 405 80 398 Q 70 405 65 398 Q 55 395 60 380 Z" fill="rgba(27,150,255,.15)" stroke="#1B96FF" stroke-width="1.2"/>
+          <path d="M 80 360 L 80 395" stroke="#1B96FF" stroke-width="1" opacity=".6"/>
+          <path d="M 72 372 Q 80 380 88 372" fill="none" stroke="#1B96FF" stroke-width="1" opacity=".5"/>
+          <path d="M 72 388 Q 80 384 88 388" fill="none" stroke="#1B96FF" stroke-width="1" opacity=".5"/>
+        </g>
+        <!-- Connection line -->
+        <line x1="120" y1="365" x2="180" y2="280" stroke="#1B96FF" stroke-width="1" stroke-dasharray="3,3" opacity=".5" class="s4"/>
+        <!-- Label -->
+        <g class="s4">
+          <rect x="25" y="430" width="115" height="22" rx="11" fill="rgba(27,150,255,.18)" stroke="#1B96FF" stroke-width="1"/>
+          <text x="82" y="445" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#1B96FF" font-weight="700">Meaning making</text>
+        </g>
+
+        <!-- "Organs/body" specimen (right) -->
+        <g class="s3">
+          <circle cx="420" cy="380" r="44" fill="rgba(46,132,74,.10)" stroke="#2E844A" stroke-width="1.5"/>
+          <!-- Stylized internal organs/circulatory diagram -->
+          <line x1="420" y1="345" x2="420" y2="415" stroke="#2E844A" stroke-width="1.5" opacity=".7"/>
+          <ellipse cx="410" cy="375" rx="10" ry="14" fill="rgba(46,132,74,.18)" stroke="#2E844A" stroke-width="1.2"/>
+          <ellipse cx="430" cy="375" rx="10" ry="14" fill="rgba(46,132,74,.18)" stroke="#2E844A" stroke-width="1.2"/>
+          <path d="M 415 360 Q 420 358 425 360" fill="none" stroke="#2E844A" stroke-width="1.2"/>
+          <ellipse cx="420" cy="395" rx="8" ry="6" fill="rgba(234,0,30,.25)" stroke="#EA001E" stroke-width="1"/>
+          <!-- Branches -->
+          <path d="M 420 405 Q 405 410 400 418" fill="none" stroke="#2E844A" stroke-width="1" opacity=".6"/>
+          <path d="M 420 405 Q 435 410 440 418" fill="none" stroke="#2E844A" stroke-width="1" opacity=".6"/>
+        </g>
+        <line x1="380" y1="365" x2="320" y2="280" stroke="#2E844A" stroke-width="1" stroke-dasharray="3,3" opacity=".5" class="s4"/>
+        <g class="s5">
+          <rect x="345" y="430" width="155" height="22" rx="11" fill="rgba(46,132,74,.18)" stroke="#2E844A" stroke-width="1"/>
+          <text x="422" y="445" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#2E844A" font-weight="700">Optimizing · coordinating · executing</text>
+        </g>
+
+        <!-- subtle annotations -->
+        <text x="250" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="2">ORGANIZATIONAL ANATOMY</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 11 — HUMAN VS AGENT WORK ════════════════ -->
+<div class="slide" data-section="WORK">
+  <div class="sn ai d1">WORK · THE DIVISION OF LABOR</div>
+  <h2 class="ai d2">Which work is for humans, <span class="a">which for agents</span>?</h2>
+  <p class="lead ai d3" style="max-width:920px;">A useful sort: capability by capability, where does each side hold the advantage today? The line isn't fixed — but it's clearer than it was a year ago.</p>
+
+  <div class="ai d4" style="margin-top:14px;">
+    <table style="width:100%;border-collapse:separate;border-spacing:0 6px;">
+      <thead>
+        <tr>
+          <th style="width:32%;text-align:right;padding:10px 16px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--accent-purple);text-transform:uppercase;">Humans + AI (Co-Intelligence)</th>
+          <th style="width:18%;text-align:center;padding:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;">Capability</th>
+          <th style="width:32%;text-align:left;padding:10px 16px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--accent-green);text-transform:uppercase;">Agents alone (Autonomic)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:right;padding:12px 18px;background:var(--apur-bg);border:1px solid var(--apur-bd);border-radius:8px 0 0 8px;font-family:var(--font-body);font-size:15px;color:var(--t1);">Navigating ambiguity</td>
+          <td style="text-align:center;padding:12px;background:var(--bg2);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);font-family:var(--font-heading);font-size:15px;color:var(--sf-blue-light);font-weight:600;">Sensing · Remembering</td>
+          <td style="text-align:left;padding:12px 18px;background:var(--agrn-bg);border:1px solid var(--agrn-bd);border-radius:0 8px 8px 0;font-family:var(--font-body);font-size:15px;color:var(--t1);">Processing unstructured data</td>
+        </tr>
+        <tr>
+          <td style="text-align:right;padding:12px 18px;background:var(--apur-bg);border:1px solid var(--apur-bd);border-radius:8px 0 0 8px;font-family:var(--font-body);font-size:15px;color:var(--t1);">Expressing values or taste</td>
+          <td style="text-align:center;padding:12px;background:var(--bg2);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);font-family:var(--font-heading);font-size:15px;color:var(--sf-blue-light);font-weight:600;">Judging · Deciding</td>
+          <td style="text-align:left;padding:12px 18px;background:var(--agrn-bg);border:1px solid var(--agrn-bd);border-radius:0 8px 8px 0;font-family:var(--font-body);font-size:15px;color:var(--t1);">Optimizing for outcomes</td>
+        </tr>
+        <tr>
+          <td style="text-align:right;padding:12px 18px;background:var(--apur-bg);border:1px solid var(--apur-bd);border-radius:8px 0 0 8px;font-family:var(--font-body);font-size:15px;color:var(--t1);">Integrating cross-domain knowledge</td>
+          <td style="text-align:center;padding:12px;background:var(--bg2);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);font-family:var(--font-heading);font-size:15px;color:var(--sf-blue-light);font-weight:600;">Ideation · Collaboration</td>
+          <td style="text-align:left;padding:12px 18px;background:var(--agrn-bg);border:1px solid var(--agrn-bd);border-radius:0 8px 8px 0;font-family:var(--font-body);font-size:15px;color:var(--t1);">Generating options</td>
+        </tr>
+        <tr>
+          <td style="text-align:right;padding:12px 18px;background:var(--apur-bg);border:1px solid var(--apur-bd);border-radius:8px 0 0 8px;font-family:var(--font-body);font-size:15px;color:var(--t1);">Assessing causality &amp; rationale</td>
+          <td style="text-align:center;padding:12px;background:var(--bg2);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);font-family:var(--font-heading);font-size:15px;color:var(--sf-blue-light);font-weight:600;">Reasoning · Planning</td>
+          <td style="text-align:left;padding:12px 18px;background:var(--agrn-bg);border:1px solid var(--agrn-bd);border-radius:0 8px 8px 0;font-family:var(--font-body);font-size:15px;color:var(--t1);">Finding complex patterns</td>
+        </tr>
+        <tr>
+          <td style="text-align:right;padding:12px 18px;background:var(--apur-bg);border:1px solid var(--apur-bd);border-radius:8px 0 0 8px;font-family:var(--font-body);font-size:15px;color:var(--t1);">Taking responsibility</td>
+          <td style="text-align:center;padding:12px;background:var(--bg2);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);font-family:var(--font-heading);font-size:15px;color:var(--sf-blue-light);font-weight:600;">Executing</td>
+          <td style="text-align:left;padding:12px 18px;background:var(--agrn-bg);border:1px solid var(--agrn-bd);border-radius:0 8px 8px 0;font-family:var(--font-body);font-size:15px;color:var(--t1);">Executing verifiable tasks</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ai d5" style="margin-top:18px;text-align:center;">
+    <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--accent-purple);text-transform:uppercase;">← Non-verifiable</span>
+    <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--t3);margin:0 18px;">·</span>
+    <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--accent-green);text-transform:uppercase;">Verifiable →</span>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 12 — WHY HUMANS REMAIN ESSENTIAL ════════════════ -->
+<div class="slide" data-section="WORK">
+  <div class="sn ai d1">WORK · WHY HUMANS REMAIN ESSENTIAL</div>
+  <h2 class="ai d2">As agents gain capability, <span class="a">human work doesn't disappear — it concentrates</span></h2>
+
+  <div class="four ai d3" style="margin-top:18px;">
+    <div class="c" style="border-top:3px solid var(--sf-blue);">
+      <div class="cl">Reason 1</div>
+      <div class="ct">Responsibility is human</div>
+      <div class="cd" style="margin-bottom:14px;">Once you're making judgments, judgments come with responsibilities. And responsibility lies with humans at the end of the day.</div>
+      <div class="pull-attr">— Joy Buolamwini</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-green);">
+      <div class="cl">Reason 2</div>
+      <div class="ct">Humans rarely know what they actually want</div>
+      <div class="cd">Stating top-level goals isn't sufficient. At each stage, new decision points are entailed and new preferences revealed. Taste cannot be fractally unrolled from a few bits of initial input.</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-amber);">
+      <div class="cl">Reason 3</div>
+      <div class="ct">Humans provide useful friction</div>
+      <div class="cd" style="margin-bottom:14px;">"Managers didn't just move information around — they edited it, and decided what mattered. A world model replaces that editorial function with something that feels like judgment but isn't."</div>
+      <div class="pull-attr">— Nate B Jones</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-purple);">
+      <div class="cl">Reason 4</div>
+      <div class="ct">Humanness may become scarce — and therefore valuable</div>
+      <div class="cd">A post-commodity economy may be emerging, where a growing share of expenditure goes toward goods and services whose value is inseparable from the human who provided them.</div>
+    </div>
+  </div>
+
+  <div class="pull ai d4" style="margin-top:22px;border-left-color:var(--accent-purple);">
+    <div class="pull-txt">"In the intelligence era, we'll have to separate the parts of work that are about meaning from the parts that are just busywork — and let machines handle the busywork."</div>
+    <div class="pull-attr">— Sam Altman</div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 13 — TOKEN ECONOMICS ════════════════ -->
+<div class="slide" data-section="WORK">
+  <div class="sn ai d1">WORK · THE NEW FACTOR OF PRODUCTION</div>
+  <h2 class="ai d2">Token consumption is exploding — but we lack <span class="a">measurement and policy tools</span></h2>
+
+  <div class="two-4 ai d3">
+    <div>
+      <p class="lead">If labor and capital were the factors of production for the industrial enterprise, then tokens — units of AI compute consumed — are becoming a third factor for the agentic one. The economics aren't yet legible inside most P&amp;Ls.</p>
+
+      <div class="ac ac-b">
+        <div class="at">What's missing</div>
+        <div class="ab"><strong>Token budgets at the individual contributor level.</strong> Most orgs can tell you headcount cost per team. Very few can tell you the marginal cost of an agent-completed task — or how that's changing month over month.</div>
+      </div>
+
+      <div class="ac ac-a">
+        <div class="at">The governance question</div>
+        <div class="ab">If every engineer is amplified 10× through tokens, then the difference between a high-output and low-output engineer compounds. How do you allocate the budget? Who is accountable for the bill? <strong>These are real questions without standard answers yet.</strong></div>
+      </div>
+    </div>
+    <div>
+      <div class="pull" style="border-left-color:var(--accent-gold);background:var(--bg2);">
+        <div class="pull-txt" style="font-size:18px;">"Every single engineer in our company will need an annual token budget. They're gonna make a few hundred thousand dollars a year their base pay. I'm gonna give them probably half of that on top of it as tokens so that they could be amplified 10×."</div>
+        <div class="pull-attr">— Jensen Huang, GTC 2026</div>
+      </div>
+
+      <svg width="100%" height="260" viewBox="0 0 460 260" style="margin-top:18px;">
+        <!-- Two columns: traditional vs agentic comp -->
+        <!-- Traditional -->
+        <text x="115" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="2">TRADITIONAL</text>
+        <rect x="65" y="50" width="100" height="180" rx="6" fill="rgba(27,150,255,.10)" stroke="#1B96FF" stroke-width="1.5"/>
+        <rect x="65" y="50" width="100" height="180" rx="6" fill="rgba(27,150,255,.15)" stroke="#1B96FF" stroke-width="0"/>
+        <text x="115" y="135" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#1B96FF" font-weight="700">Base Pay</text>
+        <text x="115" y="155" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#1B96FF">$300K</text>
+
+        <!-- Agentic -->
+        <text x="320" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="2">AGENTIC</text>
+        <rect x="270" y="50" width="100" height="180" rx="6" fill="rgba(46,132,74,.08)" stroke="#2E844A" stroke-width="1.5"/>
+        <!-- Base pay portion -->
+        <rect x="270" y="170" width="100" height="60" rx="6" fill="rgba(27,150,255,.18)" stroke="#1B96FF" stroke-width="1.5"/>
+        <text x="320" y="200" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#1B96FF" font-weight="700">Base Pay</text>
+        <text x="320" y="216" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#1B96FF">$300K</text>
+        <!-- Token portion -->
+        <text x="320" y="115" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#2E844A" font-weight="700">Token Budget</text>
+        <text x="320" y="135" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#2E844A">+$150K</text>
+        <text x="320" y="155" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#2E844A" font-style="italic">→ 10× output</text>
+
+        <!-- Arrow between -->
+        <path d="M 185 140 L 245 140" stroke="#5a6a82" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrtok)"/>
+        <defs>
+          <marker id="arrtok" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#5a6a82"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 14 — PERSONAL AI ADOPTION ════════════════ -->
+<div class="slide" data-section="CUSTOMERS">
+  <div class="sn ai d1">CUSTOMERS · ADOPTION IS ALREADY HERE</div>
+  <h2 class="ai d2">Personal AI use is <span class="a">emerging rapidly</span> — and most of it isn't work</h2>
+  <div class="two ai d3">
+    <div>
+      <p class="lead">The 2026 customer is not the 2024 customer. They've spent eighteen months talking to AI several times a day, often about things they would not have brought to a search engine, a doctor, or a friend.</p>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="mnum" style="color:var(--sf-blue-light);">1/3</div>
+          <div class="mlbl">of Americans interact with AI several times a day or almost constantly</div>
+        </div>
+        <div class="metric">
+          <div class="mnum" style="color:var(--accent-green);">&gt;70%</div>
+          <div class="mlbl">of ChatGPT messages are now non-work-related</div>
+        </div>
+      </div>
+
+      <div class="ac ac-p" style="margin-top:18px;">
+        <div class="at">What this means for incumbents</div>
+        <div class="ab">Customers are forming behavioral patterns and brand intimacies with AI systems before any of your products have an AI strategy. <strong>The reference experience for "intelligent product" is being set somewhere else.</strong></div>
+      </div>
+    </div>
+    <div>
+      <p class="lead" style="font-size:16px;font-style:italic;color:var(--t2);">Imagine if, in 2006, you'd known how the combination of search, mobile apps, and social media would revolutionize how businesses connected to customers. You're standing in the equivalent moment now.</p>
+
+      <div class="ac ac-b" style="margin-top:14px;">
+        <div class="at">The hacker signal</div>
+        <div class="ab">Early adopters are wiring up personal AI stacks themselves — Claude into Discord servers, custom agents running their email triage, voice models routing their calendar. <strong>The infrastructure is forming bottom-up</strong>, faster than any enterprise vendor can ship.</div>
+      </div>
+
+      <div class="pull" style="margin-top:14px;border-left-color:var(--sf-cloud);">
+        <div class="pull-txt">"I wired Claude into my Discord bot in a weekend. Runs my server now."</div>
+        <div class="pull-attr">Reddit / r/AI_Agents</div>
+      </div>
+    </div>
+  </div>
+  <div class="sources ai d4">
+    Pew Research Center (McClain et al., Apr 2025) · NBER Working Paper No. 34255 (Chatterji et al., Sep 2025)
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 15 — UNMET NEEDS ════════════════ -->
+<div class="slide" data-section="CUSTOMERS">
+  <div class="sn ai d1">CUSTOMERS · THE REFRAME</div>
+  <h2 class="ai d2">An "unmet needs" lens reveals <span class="a">"good enough" AI</span> in a new light</h2>
+  <p class="lead ai d3" style="max-width:920px;">If you measure AI against expert humans, it often falls short. If you measure it against <em>access</em> — the experience of those for whom the expert human was never available — the picture inverts. AI doesn't have to be best. It has to be available.</p>
+
+  <div class="three ai d4" style="margin-top:14px;">
+    <div class="c" style="border-top:3px solid var(--accent-red);">
+      <div class="cl">Unmet Need 01</div>
+      <div class="ct">Healthcare</div>
+      <div class="cd">A primary-care physician you can talk to at 2 AM about a worrying symptom, in your language, without a co-pay or three-week wait. Not better than the best doctor — but better than no doctor.</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-purple);">
+      <div class="cl">Unmet Need 02</div>
+      <div class="ct">Therapy &amp; Companionship</div>
+      <div class="cd">A consistent presence that remembers what you said yesterday, costs nothing per session, and is reachable from inside your worst moment. The clinical objections are valid. The behavioral pattern is forming anyway.</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-gold);">
+      <div class="cl">Unmet Need 03</div>
+      <div class="ct">Religion &amp; Meaning</div>
+      <div class="cd">Spiritual guidance, ritual continuity, scripture interpretation, end-of-life conversation. Areas where institutional decline left a hole, and AI is increasingly being asked to fill it — for better and worse.</div>
+    </div>
+  </div>
+
+  <div class="ac ac-a ai d5" style="margin-top:22px;">
+    <div class="at">The strategic implication</div>
+    <div class="ab">"Good enough AI for the underserved" is not a smaller market than "best-in-class AI for the well-served." <strong>It may be the larger one, and it is forming below most enterprise radars.</strong> The product category that will define the next decade may not be one any incumbent is currently building.</div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 16 — POWER SHIFTS ════════════════ -->
+<div class="slide" data-section="CUSTOMERS">
+  <div class="sn ai d1">CUSTOMERS · POWER REDISTRIBUTION</div>
+  <h2 class="ai d2">Agents shift power to <span class="a">consumers and smaller players</span></h2>
+  <p class="lead ai d3" style="max-width:920px;">Most consumers don't optimize every dollar, every day. Agentic AI breaks that equation — the cost of comparison shopping, complaint resolution, and counter-offer drafting collapses toward zero. The asymmetries that defined consumer markets quietly invert.</p>
+
+  <div class="three ai d4" style="margin-top:14px;">
+    <div class="c" style="border-top:3px solid var(--accent-red);">
+      <div class="cl">Shift 01</div>
+      <div class="ct">Less loyalty</div>
+      <div class="cd" style="margin-bottom:12px;">When an agent compares your rates against everyone else's nightly — and switches you without friction — sticky-by-default business models stop being sticky.</div>
+      <div class="pull-attr">McKinsey, "The end of inertia: agentic AI's disruption of retail and SME banking"</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-green);">
+      <div class="cl">Shift 02</div>
+      <div class="ct">Better service</div>
+      <div class="cd" style="margin-bottom:12px;">A controlled study found <strong>49%</strong> of AI-assisted customer complaints received relief, compared to 40% for human-filed ones — the agent is more patient, more persistent, and never loses the script.</div>
+      <div class="pull-attr">Minkuo Shin, City University of Hong Kong</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-amber);">
+      <div class="cl">Shift 03</div>
+      <div class="ct">Better negotiation</div>
+      <div class="cd" style="margin-bottom:12px;">Users who used AI to negotiate car purchases and apartment rentals saw significant performance improvements. The negotiation premium that informed buyers used to capture is being democratized.</div>
+      <div class="pull-attr">Ryan Shea, Columbia University</div>
+    </div>
+  </div>
+
+  <div class="ac ac-p ai d5" style="margin-top:22px;">
+    <div class="at">The second-order question</div>
+    <div class="ab">If a meaningful share of customer decisions starts running through agents — comparing, negotiating, switching — then <strong>your customer is no longer your direct customer.</strong> Your marketing reaches the agent first. Your loyalty programs reach the agent first. Your customer service is judged by the agent first. What does brand even mean in that environment?</div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 17 — A2A LANDSCAPE ════════════════ -->
+<div class="slide" data-section="CUSTOMERS">
+  <div class="sn ai d1">CUSTOMERS · THE NEW MARKET TOPOLOGY</div>
+  <h2 class="ai d2">Agents require a <span class="a">scaled response</span> from agentic enterprises</h2>
+  <p class="lead ai d3" style="max-width:920px;">Three new market quadrants are opening up — categories that didn't exist as named entities a year ago. Each represents a new interface, a new protocol, and a new addressable market.</p>
+
+  <div class="two-6 ai d4">
+    <div>
+      <svg width="100%" height="440" viewBox="0 0 500 460">
+        <!-- Matrix grid -->
+        <!-- Headers row -->
+        <text x="125" y="35" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#e8ecf4" font-weight="700">Business</text>
+        <text x="265" y="35" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#e8ecf4" font-weight="700">Consumer</text>
+        <text x="405" y="35" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" fill="#e8ecf4" font-weight="700">Agent</text>
+        <text x="265" y="15" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="2">CUSTOMER ENTITY</text>
+
+        <!-- Provider labels (rotated) -->
+        <text x="20" y="100" font-family="Outfit,sans-serif" font-size="12" fill="#e8ecf4" font-weight="700" transform="rotate(-90 20 100)">Business</text>
+        <text x="20" y="230" font-family="Outfit,sans-serif" font-size="12" fill="#e8ecf4" font-weight="700" transform="rotate(-90 20 230)">Consumer</text>
+        <text x="20" y="370" font-family="Outfit,sans-serif" font-size="12" fill="#e8ecf4" font-weight="700" transform="rotate(-90 20 370)">Agent</text>
+
+        <!-- TRADITIONAL: B2B, B2C, C2B, C2C -->
+        <!-- B2B -->
+        <rect x="55" y="55" width="140" height="90" rx="8" fill="rgba(91,106,130,.08)" stroke="#5a6a82" stroke-width="1" opacity=".6"/>
+        <text x="125" y="100" text-anchor="middle" font-family="Outfit,sans-serif" font-size="20" fill="#8b95a8" font-weight="700">B2B</text>
+        <text x="125" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">established</text>
+        <!-- B2C -->
+        <rect x="200" y="55" width="140" height="90" rx="8" fill="rgba(91,106,130,.08)" stroke="#5a6a82" stroke-width="1" opacity=".6"/>
+        <text x="270" y="100" text-anchor="middle" font-family="Outfit,sans-serif" font-size="20" fill="#8b95a8" font-weight="700">B2C</text>
+        <text x="270" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">established</text>
+        <!-- B2A -->
+        <rect x="345" y="55" width="140" height="90" rx="8" fill="rgba(27,150,255,.15)" stroke="#1B96FF" stroke-width="2"/>
+        <text x="415" y="100" text-anchor="middle" font-family="Outfit,sans-serif" font-size="22" fill="#1B96FF" font-weight="700">B2A</text>
+        <text x="415" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1B96FF" letter-spacing="1">NEW · selling to agents</text>
+
+        <!-- C2B -->
+        <rect x="55" y="185" width="140" height="90" rx="8" fill="rgba(91,106,130,.08)" stroke="#5a6a82" stroke-width="1" opacity=".6"/>
+        <text x="125" y="230" text-anchor="middle" font-family="Outfit,sans-serif" font-size="20" fill="#8b95a8" font-weight="700">C2B</text>
+        <text x="125" y="250" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">established</text>
+        <!-- C2C -->
+        <rect x="200" y="185" width="140" height="90" rx="8" fill="rgba(91,106,130,.08)" stroke="#5a6a82" stroke-width="1" opacity=".6"/>
+        <text x="270" y="230" text-anchor="middle" font-family="Outfit,sans-serif" font-size="20" fill="#8b95a8" font-weight="700">C2C</text>
+        <text x="270" y="250" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b95a8">established</text>
+        <!-- C2A -->
+        <rect x="345" y="185" width="140" height="90" rx="8" fill="rgba(147,51,234,.15)" stroke="#9333EA" stroke-width="2"/>
+        <text x="415" y="230" text-anchor="middle" font-family="Outfit,sans-serif" font-size="22" fill="#9333EA" font-weight="700">C2A</text>
+        <text x="415" y="250" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#9333EA" letter-spacing="1">NEW · personal AI environments</text>
+
+        <!-- A2B -->
+        <rect x="55" y="315" width="140" height="90" rx="8" fill="rgba(46,132,74,.15)" stroke="#2E844A" stroke-width="2"/>
+        <text x="125" y="360" text-anchor="middle" font-family="Outfit,sans-serif" font-size="22" fill="#2E844A" font-weight="700">A2B</text>
+        <text x="125" y="380" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2E844A" letter-spacing="1">NEW · agent buyers</text>
+        <!-- A2C -->
+        <rect x="200" y="315" width="140" height="90" rx="8" fill="rgba(254,147,57,.15)" stroke="#FE9339" stroke-width="2"/>
+        <text x="270" y="360" text-anchor="middle" font-family="Outfit,sans-serif" font-size="22" fill="#FE9339" font-weight="700">A2C</text>
+        <text x="270" y="380" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#FE9339" letter-spacing="1">NEW · agent-to-human</text>
+        <!-- A2A -->
+        <rect x="345" y="315" width="140" height="90" rx="8" fill="rgba(244,188,37,.15)" stroke="#F4BC25" stroke-width="2"/>
+        <text x="415" y="360" text-anchor="middle" font-family="Outfit,sans-serif" font-size="22" fill="#F4BC25" font-weight="700">A2A</text>
+        <text x="415" y="380" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#F4BC25" letter-spacing="1">NEW · agent protocols</text>
+
+        <!-- caption -->
+        <text x="250" y="440" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8b95a8" letter-spacing="2">FIVE NEW QUADRANTS, ALL EMERGING SIMULTANEOUSLY</text>
+      </svg>
+    </div>
+    <div>
+      <h3>Provider entity, rows</h3>
+      <ul class="bl">
+        <li><strong>B2A.</strong> Selling to agents acting on behalf of users. Your product, ranked and chosen by an algorithm representing a customer.</li>
+        <li><strong>C2A.</strong> Consumers operating within personal-AI environments — wearables, ambient interfaces, persistent assistants.</li>
+        <li><strong>A2B / A2C.</strong> Your own agents reaching customer agents, customer humans, partner agents.</li>
+        <li><strong>A2A.</strong> Agent-to-agent commerce, negotiation, and coordination. Protocol-mediated economic activity.</li>
+      </ul>
+
+      <div class="ac ac-b" style="margin-top:16px;">
+        <div class="at">The category gap</div>
+        <div class="ab">Most enterprises have a strategy for one quadrant — usually B2C or B2B. <strong>Almost none have an explicit strategy for being chosen by an agent</strong>, communicating with an agent, or selling another agent's output downstream. That's where the next decade of growth — and the next decade of margin compression — will play out.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 18 — LEADERSHIP ACTIONS ════════════════ -->
+<div class="slide" data-section="LEADING">
+  <div class="sn ai d1">LEADING · WHAT TO DO NOW</div>
+  <h2 class="ai d2">Leaders work in <span class="a">two registers simultaneously</span>: adopting and adapting</h2>
+  <p class="lead ai d3" style="max-width:920px;">Adopting is operational — capturing today's ROI inside existing workflows. Adapting is structural — preparing the organization for a world where agents are first-class participants. Most leadership teams are good at one. The job is doing both at once.</p>
+
+  <div class="two ai d4" style="margin-top:14px;">
+    <div>
+      <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--sf-blue-light);text-transform:uppercase;margin-bottom:14px;padding:6px 14px;background:rgba(27,150,255,.10);border:1px solid rgba(27,150,255,.25);border-radius:6px;display:inline-block;">ADOPTING — Capture the obvious ROI</div>
+
+      <div class="ac ac-b">
+        <div class="att">1. Develop AI literacy — and require it</div>
+        <div class="ab">Build your own AI fluency. Require it from your team. Without leader-level intuition, you'll get talked into the wrong bets and out of the right ones.</div>
+      </div>
+      <div class="ac ac-b">
+        <div class="att">2. Invest in obvious ROI opportunities</div>
+        <div class="ab">Inside existing workflows. The 80% cases that compound to real margin. Don't moonshot before the ground game works.</div>
+      </div>
+      <div class="ac ac-b">
+        <div class="att">3. Make data actionable</div>
+        <div class="ab">Smart unification, semantic modeling, governance. Agents are only as useful as the data substrate they reason over.</div>
+      </div>
+      <div class="ac ac-b">
+        <div class="att">4. Develop experimental muscle</div>
+        <div class="ab">Adaptive mindset. Faster cycles of trial and discard than your finance partner is comfortable with.</div>
+      </div>
+      <div class="ac ac-b">
+        <div class="att">5. Track emerging capabilities</div>
+        <div class="ab">Expect to be surprised. The jagged frontier shifts faster than quarterly planning cycles assume.</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--accent-amber);text-transform:uppercase;margin-bottom:14px;padding:6px 14px;background:rgba(254,147,57,.10);border:1px solid rgba(254,147,57,.25);border-radius:6px;display:inline-block;">ADAPTING — Prepare for what's actually coming</div>
+
+      <div class="ac ac-a">
+        <div class="att">1. Communicate honestly about jobs</div>
+        <div class="ab">Recognize AI disruption of tasks, jobs, and systems. Communicate clearly: <strong>all jobs are not going away — but many will change shape.</strong> The wrong message is denial. The other wrong message is panic.</div>
+      </div>
+      <div class="ac ac-a">
+        <div class="att">2. Evolve toward the autonomic core</div>
+        <div class="ab">And the humans + agents layer. Restructure work, not just tools. The org chart is the strategy.</div>
+      </div>
+      <div class="ac ac-a">
+        <div class="att">3. Make customer-centricity the purpose</div>
+        <div class="ab">Of your agentic enterprise. Use the new tools to solve the coordination problem that journey maps never could.</div>
+      </div>
+      <div class="ac ac-a">
+        <div class="att">4. Experiment with new differentiation</div>
+        <div class="ab">Future sources of competitive advantage — being chosen by agents, partnering with personal AIs, owning A2A protocols.</div>
+      </div>
+      <div class="ac ac-a">
+        <div class="att">5. Prepare your scaled response to personal AI</div>
+        <div class="ab">Powerful and pervasive. <strong>Assume customers will increasingly arrive at your business through an intermediary they trust more than they trust you.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SLIDE 19 — CLOSING ARGUMENT ════════════════ -->
+<div class="slide" data-section="LEADING">
+  <div class="sn ai d1">THE TAKEAWAY</div>
+  <h2 class="ai d2">The Agentic Enterprise isn't a product strategy. It's <span class="a">an organizational strategy</span>.</h2>
+
+  <div class="quote ai d3" style="font-size:clamp(20px,2.4vw,30px);">
+    "The clerical task, writing down transactions and reconciling ledgers, is a weak bundle. The accountant's job is a strong bundle. She interprets tax law as it applies to a specific client, signs the audit that the bank and the SEC will rely on, and carries the legal exposure."
+  </div>
+  <div class="attrib ai d3">— Luis Garicano, <em>The Task is not the Job</em></div>
+
+  <div class="dv ai d4" style="margin:22px 0;"></div>
+
+  <div class="three ai d5" style="gap:16px;">
+    <div class="c" style="border-top:3px solid var(--sf-blue);">
+      <div class="cl">The Shift</div>
+      <div class="ct" style="font-size:17px;">From "AI as feature" to AI as organizational substrate</div>
+      <div class="cd" style="font-size:14px;">Agents are not a new SKU. They're a new mode of getting work done — and the org that uses them well will look different from the one that doesn't.</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-green);">
+      <div class="cl">The Principle</div>
+      <div class="ct" style="font-size:17px;">Separate strong bundles from weak ones</div>
+      <div class="cd" style="font-size:14px;">Weak bundles (clerical, repeatable, verifiable) move to agents. Strong bundles (judgment, responsibility, taste, relationship) concentrate value in humans.</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--accent-amber);">
+      <div class="cl">The Discipline</div>
+      <div class="ct" style="font-size:17px;">Both registers, simultaneously</div>
+      <div class="cd" style="font-size:14px;">Capture the obvious ROI today. Restructure for the world you don't yet see. The temptation is to do only one. The winners will do both.</div>
+    </div>
+  </div>
+
+  <p class="sub ai d6" style="margin-top:26px;font-size:17px;max-width:900px;line-height:1.7;color:var(--t3);">
+    The official future says AI will be useful. The futures that actually arrive will be stranger, faster, and structurally different from that. The work is to take them seriously before they're consensus.
+  </p>
+</div>
+
+<!-- ════════════════ SLIDE 20 — THANK YOU ════════════════ -->
+<div class="slide close-s" data-section="THANK YOU">
+  <div class="sn ai d1">SALESFORCE FUTURES</div>
+  <h1 class="ai d2" style="margin-bottom:18px;">Thank<br><span class="a">you</span>.</h1>
+  <div class="dv ai d3" style="margin:22px auto;"></div>
+  <p class="sub ai d4" style="max-width:660px;text-align:center;margin:0 auto;">Want to go deeper on Futures work?</p>
+
+  <div class="ai d5" style="margin-top:30px;display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:900px;">
+    <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px 22px;font-family:var(--font-mono);font-size:13px;color:var(--sf-blue-light);">sfdc.co/Futures25</div>
+    <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px 22px;font-family:var(--font-mono);font-size:13px;color:var(--sf-blue-light);">sfdc.co/InventingWithAgents</div>
+    <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px 22px;font-family:var(--font-mono);font-size:13px;color:var(--sf-blue-light);">sfdc.co/AIAgentsAtWork</div>
+    <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px 22px;font-family:var(--font-mono);font-size:13px;color:var(--sf-blue-light);">sfdc.co/PersonalAI</div>
+  </div>
+
+  <p class="ai d6" style="margin-top:36px;font-family:var(--font-body);font-size:18px;color:var(--t2);">We'd love to hear from you.</p>
+  <p class="ai d6" style="margin-top:8px;font-family:var(--font-mono);font-size:16px;color:var(--sf-blue-light);letter-spacing:1px;">futures@salesforce.com</p>
+</div>
+
+</div><!-- /deck -->
+
+<div class="nav-bar">
+  <div style="font-family:var(--font-mono);font-size:11px;">← → Navigate &nbsp;|&nbsp; T: Theme</div>
+  <div class="sec" id="secLabel"></div>
+  <div class="ctr" id="counter">1 / 20</div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const progressFill = document.getElementById('progress');
+const counter = document.getElementById('counter');
+const secLabel = document.getElementById('secLabel');
+let cur = 0;
+
+function goTo(n) {
+  if (n < 0 || n >= slides.length) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit-up');
+  const prev = cur;
+  cur = n;
+  setTimeout(() => slides[prev].classList.remove('exit-up'), 520);
+  slides[cur].classList.remove('exit-up');
+  slides[cur].classList.add('active');
+  progressFill.style.width = ((cur + 1) / slides.length * 100) + '%';
+  counter.textContent = (cur + 1) + ' / ' + slides.length;
+  secLabel.textContent = slides[cur].dataset.section || '';
+}
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); goTo(cur + 1); }
+  if (['ArrowLeft','ArrowUp'].includes(e.key)) goTo(cur - 1);
+  if (e.key.toLowerCase() === 't') {
+    const h = document.documentElement;
+    h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+  }
+});
+
+document.getElementById('togBtn').addEventListener('click', () => {
+  const h = document.documentElement;
+  h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+});
+
+document.querySelector('.deck').addEventListener('click', e => {
+  if (e.target.closest('#togBtn')) return;
+  if (e.target.closest('a')) return;
+  goTo(e.clientX > window.innerWidth / 2 ? cur + 1 : cur - 1);
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) goTo(dx < 0 ? cur + 1 : cur - 1);
+});
+
+// Initial section label
+secLabel.textContent = slides[0].dataset.section || '';
+progressFill.style.width = (1/slides.length * 100) + '%';
+</script>
+</body>
+</html>
